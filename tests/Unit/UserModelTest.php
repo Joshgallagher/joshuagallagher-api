@@ -11,7 +11,7 @@ class UserModelTest extends TestCase
      */
     public function a_users_full_name_is_returned_formatted()
     {
-        $user = factory(\App\Models\User::class)->make([
+        $user = factory(\App\Models\User::class)->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
         ]);
