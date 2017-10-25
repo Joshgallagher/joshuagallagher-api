@@ -30,6 +30,21 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
+    /**
+     * A user can have many articles.
+     *
+     * @return Illuminate\Database\Eloquent\Concerns\hasMany
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+    /**
+     * Return the columns 'first_name' and 'last_name' as a formatted full name.
+     *
+     * @return String
+     */
     public function getFullName()
     {
         return "{$this->first_name} {$this->last_name}";

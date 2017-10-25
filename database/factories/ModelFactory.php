@@ -18,5 +18,7 @@ $factory->define(App\Models\Article::class, function (Faker\Generator $faker) {
         'title' => $title,
         'teaser' => $faker->paragraph(rand(2, 4)),
         'body' => $faker->text(rand(200, 400)),
+        'created_at' => Carbon\Carbon::now(),
+        'updated_at' => Carbon\Carbon::now(),
     ];
 });
