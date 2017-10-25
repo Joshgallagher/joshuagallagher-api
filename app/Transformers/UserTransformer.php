@@ -7,9 +7,10 @@ use App\Models\User;
 class UserTransfromer extends Transfomer
 {
     /**
-     * Transform the given user model instance into JSON.
+     * Transform the given user collection into JSON.
      *
-     * @return App\Models\User $user
+     * @param  User $user
+     * @return array
      */
     public function transform(User $user)
     {
