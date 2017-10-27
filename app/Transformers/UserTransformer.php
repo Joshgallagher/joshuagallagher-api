@@ -3,8 +3,9 @@
 namespace App\Transfomers;
 
 use App\Models\User;
+use League\Fractal\TransformerAbstract;
 
-class UserTransfromer extends Transfomer
+class UserTransfromer extends TransformerAbstract
 {
     /**
      * Transform the given user collection into JSON.

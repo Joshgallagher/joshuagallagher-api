@@ -9,16 +9,32 @@ use App\Transformers\ArticleTransformer;
 class ArticleController extends Controller
 {
     /**
-     * [index description]
+     * Returns a collection of articles.
      *
-     * @return [type] [description]
+     * @return App\Transformers\ArticleTransformer
      */
     public function index()
     {
-        $articles = (new Article)->get();
+        return Fractal::create()
+            ->collection(Article::get())
+            ->parseIncludes(['user'])
+            ->transformWith(new ArticleTransformer())
+            ->toArray();
+    }
+
+    /**
+     * Show a specific topic requested by it's slug.
+     *
+     * @param  String $slug
+     * @return App\Transformers\ArticleTransformer
+     */
+    public function show(String $slug)
+    {
+        $article = Article::where('slug', $slug);
 
         return Fractal::create()
-            ->collection($articles)
+            ->item($article->first())
+            ->parseIncludes(['user'])
             ->transformWith(new ArticleTransformer())
             ->toArray();
     }

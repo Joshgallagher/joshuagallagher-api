@@ -14,7 +14,7 @@ class ArticleTest extends TestCase
     public function a_collection_of_articles_are_returned_as_json()
     {
         factory(User::class)->create();
-        $articles = factory(Article::class, 4)->create();
+        $articles = factory(Article::class, 10)->create();
 
         $this->json('GET', '/articles')
             ->seeJsonStructure([
@@ -24,8 +24,40 @@ class ArticleTest extends TestCase
                     'teaser',
                     'body',
                     'created_at',
-                    'updated_at'
-                ]]
+                    'updated_at',
+                    'user' => [
+                        'data' => [
+                            'name'
+                        ]
+                    ]
+                ]],
+            ])
+            ->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     */
+    public function a_single_article_is_returned_as_json()
+    {
+        $user = factory(User::class)->create();
+        $article = factory(Article::class)->create();
+
+        $this->json('GET', "/articles/{$article->slug}")
+            ->seeJson([
+                'data' => [
+                    'title' => $article->title,
+                    'slug' => $article->slug,
+                    'teaser' => $article->teaser,
+                    'body' => $article->body,
+                    'created_at' => $article->created_at,
+                    'updated_at' => $article->updated_at,
+                    'user' => [
+                        'data' => [
+                            'name' => $user->getFullName(),
+                        ]
+                    ]
+                ],
             ])
             ->assertResponseStatus(200);
     }
