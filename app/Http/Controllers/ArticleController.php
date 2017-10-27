@@ -8,12 +8,17 @@ use App\Transformers\ArticleTransformer;
 
 class ArticleController extends Controller
 {
+    /**
+     * [index description]
+     *
+     * @return [type] [description]
+     */
     public function index()
     {
-        $articles = new Article;
+        $articles = (new Article)->get();
 
-        Fractal::create()
-            ->collection($articles->get())
+        return Fractal::create()
+            ->collection($articles)
             ->transformWith(new ArticleTransformer())
             ->toArray();
     }
