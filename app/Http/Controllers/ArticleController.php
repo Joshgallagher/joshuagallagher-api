@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Spatie\Fractalistic\Fractal;
 use App\Transformers\ArticleTransformer;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 
 class ArticleController extends Controller
 {
@@ -15,13 +16,14 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')
-            ->get();
+        $articles = Article::orderBy('created_at', 'desc')->paginate(5);
+        $articlesCollection = $articles->getCollection();
 
         return Fractal::create()
-            ->collection($articles)
+            ->collection($articlesCollection)
             ->parseIncludes(['user'])
             ->transformWith(new ArticleTransformer())
+            ->paginateWith(new IlluminatePaginatorAdapter($articles))
             ->toArray();
     }
 
@@ -33,8 +35,7 @@ class ArticleController extends Controller
      */
     public function show(String $slug)
     {
-        $article = Article::where('slug', $slug)
-            ->first();
+        $article = Article::where('slug', $slug)->first();
 
         return Fractal::create()
             ->item($article)

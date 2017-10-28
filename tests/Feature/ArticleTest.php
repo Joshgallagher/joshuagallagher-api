@@ -31,6 +31,18 @@ class ArticleTest extends TestCase
                         ]
                     ]
                 ]],
+                'meta' => [
+                    'pagination' => [
+                        'total',
+                        'count',
+                        'per_page',
+                        'current_page',
+                        'total_pages',
+                        'links' => [
+                            'next',
+                        ]
+                    ]
+                ]
             ])
             ->assertResponseStatus(200);
     }
