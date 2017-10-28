@@ -73,4 +73,33 @@ class ArticleTest extends TestCase
             ])
             ->assertResponseStatus(200);
     }
+
+    public function a_collection_of_articles_are_returned_paginated()
+    {
+        factory(User::class)->create();
+        $articles = factory(Article::class, 25)->create();
+        $genArticle = factory(Article::class)->create([
+            'title' => 'Oldest Post',
+            'slug' => 'oldest-post',
+        ]);
+
+        array_merge($articles, $genArticle);
+
+        $this->json('GET', '/articles?page=6')
+            ->seeJson([
+                'meta' => [
+                    'pagination' => [
+                        'total' => 26,
+                        'count' => 1,
+                        'per_page' => 5,
+                        'current_page' => 6,
+                        'total_pages' => 6,
+                        'links' => [
+                            'previous' => 'http://joshuagallagherapi.dev/articles?page=5',
+                        ]
+                    ]
+                ]
+            ])
+            ->assertResponseStatus(200);
+    }
 }
