@@ -14,7 +14,18 @@ class ArticleTest extends TestCase
     public function a_collection_of_articles_are_returned_as_json()
     {
         factory(User::class)->create();
-        $articles = factory(Article::class, 10)->create();
+        factory(Article::class)->create([
+            'title' => 'Lumen',
+            'slug' => 'Lumen',
+        ]);
+        factory(Article::class)->create([
+            'title' => 'Laravel',
+            'slug' => 'laravel',
+        ]);
+        factory(Article::class)->create([
+            'title' => 'Vue.js',
+            'slug' => 'vue-js',
+        ]);
 
         $this->json('GET', '/articles')
             ->seeJsonStructure([
@@ -38,11 +49,17 @@ class ArticleTest extends TestCase
                         'per_page',
                         'current_page',
                         'total_pages',
-                        'links' => [
-                            'next',
-                        ]
+                        'links' => [],
                     ]
                 ]
+            ])
+            ->seeJson([
+                'title' => 'Lumen',
+                'slug' => 'Lumen',
+                'title' => 'Laravel',
+                'slug' => 'laravel',
+                'title' => 'Vue.js',
+                'slug' => 'vue-js',
             ])
             ->assertResponseStatus(200);
     }
@@ -56,49 +73,84 @@ class ArticleTest extends TestCase
         $article = factory(Article::class)->create();
 
         $this->json('GET', "/articles/{$article->slug}")
-            ->seeJson([
+            ->seeJsonStructure([
                 'data' => [
-                    'title' => $article->title,
-                    'slug' => $article->slug,
-                    'teaser' => $article->teaser,
-                    'body' => $article->body,
-                    'created_at' => $article->created_at,
-                    'updated_at' => $article->updated_at,
+                    'title',
+                    'slug',
+                    'teaser',
+                    'body',
+                    'created_at',
+                    'updated_at',
                     'user' => [
                         'data' => [
-                            'name' => $user->getFullName(),
+                            'name'
                         ]
                     ]
-                ],
+                ]
+            ])
+            ->seeJson([
+                'title' => $article->title,
+                'slug' => $article->slug,
+                'teaser' => $article->teaser,
+                'body' => $article->body,
+                'created_at' => $article->created_at,
+                'updated_at' => $article->updated_at,
+                'name' => $user->getFullName(),
             ])
             ->assertResponseStatus(200);
     }
 
-    public function a_collection_of_articles_are_returned_paginated()
+    /**
+     * @test
+     */
+    public function a_collection_of_articles_are_paginated()
     {
-        factory(User::class)->create();
-        $articles = factory(Article::class, 25)->create();
-        $genArticle = factory(Article::class)->create([
-            'title' => 'Oldest Post',
-            'slug' => 'oldest-post',
-        ]);
-
-        array_merge($articles, $genArticle);
+        $user = factory(User::class)->create();
+        factory(Article::class, 25)->create();
+        $genArticle = factory(Article::class)->create();
 
         $this->json('GET', '/articles?page=6')
-            ->seeJson([
+            ->seeJsonStructure([
+                'data' => [[
+                    'title',
+                    'slug',
+                    'teaser',
+                    'body',
+                    'created_at',
+                    'updated_at',
+                    'user' => [
+                        'data' => [
+                            'name'
+                        ]
+                    ]
+                ]],
                 'meta' => [
                     'pagination' => [
-                        'total' => 26,
-                        'count' => 1,
-                        'per_page' => 5,
-                        'current_page' => 6,
-                        'total_pages' => 6,
+                        'total',
+                        'count',
+                        'per_page',
+                        'current_page',
+                        'total_pages',
                         'links' => [
-                            'previous' => 'http://joshuagallagherapi.dev/articles?page=5',
+                            'previous',
                         ]
                     ]
                 ]
+            ])
+            ->seeJson([
+                'title' => $genArticle->title,
+                'slug' => $genArticle->slug,
+                'teaser' => $genArticle->teaser,
+                'body' => $genArticle->body,
+                'created_at' => $genArticle->created_at,
+                'updated_at' => $genArticle->updated_at,
+                'name' => $user->getFullName(),
+                'total' => 26,
+                'count' => 1,
+                'per_page' => 5,
+                'current_page' => 6,
+                'total_pages' => 6,
+                'previous' => 'http://localhost/articles?page=5',
             ])
             ->assertResponseStatus(200);
     }
