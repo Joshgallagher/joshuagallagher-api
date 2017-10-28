@@ -16,15 +16,12 @@ class ArticleTest extends TestCase
         factory(User::class)->create();
         factory(Article::class)->create([
             'title' => 'Lumen',
-            'slug' => 'Lumen',
         ]);
         factory(Article::class)->create([
             'title' => 'Laravel',
-            'slug' => 'laravel',
         ]);
         factory(Article::class)->create([
             'title' => 'Vue.js',
-            'slug' => 'vue-js',
         ]);
 
         $this->json('GET', '/articles')
