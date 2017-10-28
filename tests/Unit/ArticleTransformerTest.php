@@ -14,8 +14,8 @@ class ArticleTransformerTest extends TestCase
      */
     public function article_fields_are_transformed_to_an_array_for_a_json_response()
     {
-        factory(User::class)->create();
-        $article = factory(Article::class)->create([
+        factory(User::class)->make();
+        $article = factory(Article::class)->make([
             'title' => 'Lumen',
             'slug' => 'lumen',
         ]);

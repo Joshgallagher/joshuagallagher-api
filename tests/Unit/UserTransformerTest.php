@@ -13,7 +13,7 @@ class UserTransformerTest extends TestCase
      */
     public function user_fields_are_transformed_to_an_array_for_a_json_response()
     {
-        $user = factory(User::class)->create([
+        $user = factory(User::class)->make([
             'first_name' => 'Joshua',
             'last_name' => 'Gallagher',
         ]);
