@@ -19,6 +19,7 @@ class Article extends Model
 
     /**
      * The 'updated_at' columns date format is returned as d/m/y, i.e. 20/07/97.
+     *
      * @param  String $date
      * @return Carbon\Carbon
      */
@@ -29,6 +30,7 @@ class Article extends Model
 
     /**
      * The 'updated_at' columns date format is returned as d/m/y, i.e. 20/07/97.
+     *
      * @param  String $date
      * @return Carbon\Carbon
      */

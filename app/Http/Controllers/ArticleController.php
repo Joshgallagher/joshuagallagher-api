@@ -15,25 +15,29 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        $articles = Article::orderBy('created_at', 'desc')
+            ->get();
+
         return Fractal::create()
-            ->collection(Article::get())
+            ->collection($articles)
             ->parseIncludes(['user'])
             ->transformWith(new ArticleTransformer())
             ->toArray();
     }
 
     /**
-     * Show a specific topic requested by it's slug.
+     * Return a specific topic as JSON, requested by it's slug.
      *
      * @param  String $slug
      * @return App\Transformers\ArticleTransformer
      */
     public function show(String $slug)
     {
-        $article = Article::where('slug', $slug);
+        $article = Article::where('slug', $slug)
+            ->first();
 
         return Fractal::create()
-            ->item($article->first())
+            ->item($article)
             ->parseIncludes(['user'])
             ->transformWith(new ArticleTransformer())
             ->toArray();
