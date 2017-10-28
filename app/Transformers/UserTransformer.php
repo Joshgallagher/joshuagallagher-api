@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Transfomers;
+namespace App\Transformers;
 
 use App\Models\User;
 use League\Fractal\TransformerAbstract;
 
-class UserTransfromer extends TransformerAbstract
+class UserTransformer extends TransformerAbstract
 {
     /**
      * Transform the given user collection into JSON.
