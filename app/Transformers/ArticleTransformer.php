@@ -3,7 +3,6 @@
 namespace App\Transformers;
 
 use App\Models\Article;
-use App\Transfomers\UserTransfromer;
 use League\Fractal\TransformerAbstract;
 
 class ArticleTransformer extends TransformerAbstract
@@ -42,6 +41,6 @@ class ArticleTransformer extends TransformerAbstract
      */
     public function includeUser(Article $article)
     {
-        return $this->item($article->user, new UserTransfromer);
+        return $this->item($article->user, new UserTransformer());
     }
 }
