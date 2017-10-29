@@ -27,7 +27,7 @@ class ArticleTest extends TestCase
             'slug' => 'vue-js',
         ]);
 
-        $this->json('GET', '/articles')
+        $this->json('GET', '/api/articles')
             ->seeJsonStructure([
                 'data' => [[
                     'title',
@@ -72,7 +72,7 @@ class ArticleTest extends TestCase
         $user = factory(User::class)->create();
         $article = factory(Article::class)->create();
 
-        $this->json('GET', "/articles/{$article->slug}")
+        $this->json('GET', "/api/articles/{$article->slug}")
             ->seeJsonStructure([
                 'data' => [
                     'title',
@@ -109,7 +109,7 @@ class ArticleTest extends TestCase
         factory(Article::class, 25)->create();
         $genArticle = factory(Article::class)->create();
 
-        $this->json('GET', '/articles?page=6')
+        $this->json('GET', '/api/articles?page=6')
             ->seeJsonStructure([
                 'data' => [[
                     'title',
@@ -150,7 +150,7 @@ class ArticleTest extends TestCase
                 'per_page' => 5,
                 'current_page' => 6,
                 'total_pages' => 6,
-                'previous' => 'http://localhost/articles?page=5',
+                'previous' => 'http://localhost/api/articles?page=5',
             ])
             ->assertResponseStatus(200);
     }
