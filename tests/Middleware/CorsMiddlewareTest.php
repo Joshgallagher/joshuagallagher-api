@@ -34,5 +34,17 @@ class CorsMiddlewareTest extends TestCase
      */
     public function preflight_request_is_handled()
     {
+        $request = Request::create('/api/articles?page=1', 'OPTIONS');
+
+        $middleware = new Cors;
+
+        $response = $middleware->handle($request, function () {
+        });
+
+        $this->assertEquals($response->headers->get('Access-Control-Allow-Origin'), '*');
+        $this->assertEquals($response->headers->get('Access-Control-Allow-Methods'), 'HEAD, GET, OPTIONS');
+        $this->assertEquals($response->headers->get('Access-Control-Allow-Headers'), 'Content-Type');
+
+        $this->assertEquals($response->getStatusCode(), 200);
     }
 }

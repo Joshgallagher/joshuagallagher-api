@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response;
 
 class Cors
 {
@@ -15,11 +16,21 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
+        $headers = [
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'HEAD, GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type',
+        ];
+
+        if ($request->getMethod() === 'OPTIONS') {
+            return Response(null, 200, $headers);
+        }
+
         $response = $next($request);
 
-        $response->header('Access-Control-Allow-Origin', '*');
-        $response->header('Access-Control-Allow-Methods', 'HEAD, GET, OPTIONS');
-        $response->header('Access-Control-Allow-Headers', 'Content-Type');
+        foreach ($headers as $key => $value) {
+            $response->header($key, $value);
+        }
 
         return $response;
     }
