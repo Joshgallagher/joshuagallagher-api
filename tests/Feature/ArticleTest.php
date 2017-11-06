@@ -106,10 +106,10 @@ class ArticleTest extends TestCase
     public function a_collection_of_articles_are_paginated()
     {
         $user = factory(User::class)->create();
-        factory(Article::class, 25)->create();
+        factory(Article::class, 24)->create();
         $genArticle = factory(Article::class)->create();
 
-        $this->json('GET', '/api/articles?page=6')
+        $this->json('GET', '/api/articles?page=7')
             ->seeJsonStructure([
                 'data' => [[
                     'title',
@@ -145,12 +145,12 @@ class ArticleTest extends TestCase
                 'created_at' => $genArticle->created_at,
                 'updated_at' => $genArticle->updated_at,
                 'name' => $user->getFullName(),
-                'total' => 26,
+                'total' => 25,
                 'count' => 1,
-                'per_page' => 5,
-                'current_page' => 6,
-                'total_pages' => 6,
-                'previous' => 'http://localhost/api/articles?page=5',
+                'per_page' => 4,
+                'current_page' => 7,
+                'total_pages' => 7,
+                'previous' => 'http://localhost/api/articles?page=6',
             ])
             ->assertResponseStatus(200);
     }

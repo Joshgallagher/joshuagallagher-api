@@ -16,7 +16,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('created_at', 'desc')->paginate(5);
+        $articles = Article::orderBy('created_at', 'desc')->paginate(4);
         $articlesCollection = $articles->getCollection();
 
         return Fractal::create()
