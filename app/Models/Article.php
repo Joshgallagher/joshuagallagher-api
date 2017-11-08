@@ -25,7 +25,7 @@ class Article extends Model
      */
     public function getCreatedAtAttribute(String $date)
     {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d\/m\/y');
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('F d, Y');
     }
 
     /**
@@ -36,6 +36,6 @@ class Article extends Model
      */
     public function getUpdatedAtAttribute(String $date)
     {
-        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('d\/m\/y');
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('F d, Y');
     }
 }

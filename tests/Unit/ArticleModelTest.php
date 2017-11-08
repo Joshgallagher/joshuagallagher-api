@@ -11,16 +11,16 @@ class ArticleModelTest extends TestCase
     /**
      * @test
      */
-    public function format_article_dates_as_day_month_year_with_forward_slashes()
+    public function format_article_dates_as_month_day_comma_year()
     {
         factory(User::class)->create();
         $article = factory(Article::class)->create([
             'created_at' => '1997-07-20 17:16:18',
-            'updated_at' => '1997-07-20 17:16:18',
+            'updated_at' => '1997-07-20 17:16:18'
         ]);
 
-        $this->assertEquals($article->created_at, '20/07/97');
-        $this->assertEquals($article->updated_at, '20/07/97');
+        $this->assertEquals($article->created_at, 'July 20, 1997');
+        $this->assertEquals($article->updated_at, 'July 20, 1997');
     }
 
     /**
