@@ -5,7 +5,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 try {
     (new Dotenv\Dotenv(__DIR__.'/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
-    //
 }
 
 /*
@@ -60,7 +59,7 @@ $app->singleton(
 */
 
 $app->middleware([
-   App\Http\Middleware\Cors::class
+   App\Http\Middleware\Cors::class,
 ]);
 
 // $app->routeMiddleware([
@@ -81,6 +80,8 @@ $app->middleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
+$app->register(GrahamCampbell\Markdown\MarkdownServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
