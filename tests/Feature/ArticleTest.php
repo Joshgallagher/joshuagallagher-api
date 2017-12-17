@@ -38,9 +38,9 @@ class ArticleTest extends TestCase
                     'updated_at',
                     'user' => [
                         'data' => [
-                            'name'
-                        ]
-                    ]
+                            'name',
+                        ],
+                    ],
                 ]],
                 'meta' => [
                     'pagination' => [
@@ -50,8 +50,8 @@ class ArticleTest extends TestCase
                         'current_page',
                         'total_pages',
                         'links' => [],
-                    ]
-                ]
+                    ],
+                ],
             ])
             ->seeJson([
                 'title' => 'Lumen',
@@ -70,7 +70,9 @@ class ArticleTest extends TestCase
     public function a_single_article_is_returned_as_json()
     {
         $user = factory(User::class)->create();
-        $article = factory(Article::class)->create();
+        $article = factory(Article::class)->create([
+            'body' => 'This text should be wrapped in p tags.',
+        ]);
 
         $this->json('GET', "/api/articles/{$article->slug}")
             ->seeJsonStructure([
@@ -83,16 +85,16 @@ class ArticleTest extends TestCase
                     'updated_at',
                     'user' => [
                         'data' => [
-                            'name'
-                        ]
-                    ]
-                ]
+                            'name',
+                        ],
+                    ],
+                ],
             ])
             ->seeJson([
                 'title' => $article->title,
                 'slug' => $article->slug,
                 'teaser' => $article->teaser,
-                'body' => $article->body,
+                'body' => "<p>This text should be wrapped in p tags.</p>\n",
                 'created_at' => $article->created_at,
                 'updated_at' => $article->updated_at,
                 'name' => $user->getFullName(),
@@ -107,7 +109,9 @@ class ArticleTest extends TestCase
     {
         $user = factory(User::class)->create();
         factory(Article::class, 24)->create();
-        $genArticle = factory(Article::class)->create();
+        $genArticle = factory(Article::class)->create([
+            'body' => 'This text should be wrapped in p tags.',
+        ]);
 
         $this->json('GET', '/api/articles?page=7')
             ->seeJsonStructure([
@@ -120,9 +124,9 @@ class ArticleTest extends TestCase
                     'updated_at',
                     'user' => [
                         'data' => [
-                            'name'
-                        ]
-                    ]
+                            'name',
+                        ],
+                    ],
                 ]],
                 'meta' => [
                     'pagination' => [
@@ -133,15 +137,15 @@ class ArticleTest extends TestCase
                         'total_pages',
                         'links' => [
                             'previous',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ])
             ->seeJson([
                 'title' => $genArticle->title,
                 'slug' => $genArticle->slug,
                 'teaser' => $genArticle->teaser,
-                'body' => $genArticle->body,
+                'body' => "<p>This text should be wrapped in p tags.</p>\n",
                 'created_at' => $genArticle->created_at,
                 'updated_at' => $genArticle->updated_at,
                 'name' => $user->getFullName(),
@@ -151,6 +155,29 @@ class ArticleTest extends TestCase
                 'current_page' => 7,
                 'total_pages' => 7,
                 'previous' => 'http://localhost/api/articles?page=6',
+            ])
+            ->assertResponseStatus(200);
+    }
+
+    /**
+     * @test
+     */
+    public function an_article_should_return_the_body_as_parsed_markdown()
+    {
+        $user = factory(User::class)->create();
+        $article = factory(Article::class)->create([
+            'body' => 'This text should be wrapped in p tags.',
+        ]);
+
+        $this->json('GET', "/api/articles/{$article->slug}")
+        ->seeJson([
+                'title' => $article->title,
+                'slug' => $article->slug,
+                'teaser' => $article->teaser,
+                'body' => "<p>This text should be wrapped in p tags.</p>\n",
+                'created_at' => $article->created_at,
+                'updated_at' => $article->updated_at,
+                'name' => $user->getFullName(),
             ])
             ->assertResponseStatus(200);
     }
