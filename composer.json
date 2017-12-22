@@ -8,7 +8,8 @@
         "php": ">=7.0",
         "laravel/lumen-framework": "5.5.*",
         "vlucas/phpdotenv": "~2.2",
-        "spatie/fractalistic": "^2.7"
+        "spatie/fractalistic": "^2.7",
+        "graham-campbell/markdown": "^8.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

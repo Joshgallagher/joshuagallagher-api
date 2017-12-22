@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Models\Article;
 use League\Fractal\TransformerAbstract;
+use GrahamCampbell\Markdown\Facades\Markdown;
 
 class ArticleTransformer extends TransformerAbstract
 {
@@ -17,7 +18,8 @@ class ArticleTransformer extends TransformerAbstract
     /**
      * Transform the given article collection into JSON.
      *
-     * @param  Article $article
+     * @param Article $article
+     *
      * @return array
      */
     public function transform(Article $article)
@@ -26,7 +28,7 @@ class ArticleTransformer extends TransformerAbstract
             'title' => $article->title,
             'slug' => $article->slug,
             'teaser' => $article->teaser,
-            'body' => $article->body,
+            'body' => Markdown::convertToHtml($article->body),
             'created_at' => $article->created_at,
             'updated_at' => $article->updated_at,
         ];
@@ -36,7 +38,8 @@ class ArticleTransformer extends TransformerAbstract
      * Returns the user associated to a specific article,
      * for injection into the Article transformer.
      *
-     * @param  Article $article
+     * @param Article $article
+     *
      * @return Spatie\Fractalistic\item
      */
     public function includeUser(Article $article)
