@@ -170,9 +170,9 @@ class ArticleTest extends TestCase
         ]);
 
         $this->json('GET', "/api/articles/{$article->slug}")
-        ->seeJson([
-            'body' => "<p>This text should be wrapped in p tags.</p>\n",
-        ])
-        ->assertResponseStatus(200);
+            ->seeJson([
+                'body' => "<p>This text should be wrapped in p tags.</p>\n",
+            ])
+            ->assertResponseStatus(200);
     }
 }
